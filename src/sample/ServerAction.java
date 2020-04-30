@@ -14,7 +14,7 @@ public class ServerAction {
     int buffersize = 7000;
 
 
-    public void logIn(String log, String pass) {
+    public boolean logIn(String log, String pass) {
 
         String msg = "login@" + log.trim() + "|" + pass.trim();
         System.out.println(msg);
@@ -35,10 +35,15 @@ public class ServerAction {
                 String repl = new String(reply.getData());
 
 
-                System.out.println("ok" + repl.trim());
+
 
 
                 aSocket.close();
+
+                if(repl.trim().equals("1")) {
+                    System.out.println(repl.trim());
+                    return true;
+                }
                 break;
             } while (msg.trim().equals("quit"));
 
@@ -52,6 +57,7 @@ public class ServerAction {
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
         }
+    return false;
     }
 
 
