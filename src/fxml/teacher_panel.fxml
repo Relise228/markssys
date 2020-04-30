@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="534.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.TeacherPanel">
+<AnchorPane focusTraversable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="534.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.TeacherPanel">
    <children>
       <Label fx:id="teacherName" layoutX="14.0" layoutY="37.0" prefHeight="24.0" prefWidth="163.0" text="Teacher_name" textAlignment="RIGHT" textOverrun="CENTER_ELLIPSIS">
          <font>
@@ -25,8 +25,8 @@
             <Font name="Book Antiqua" size="14.0" />
          </font>
       </Button>
-      <TableView layoutX="187.0" layoutY="290.0" prefHeight="200.0" prefWidth="502.0" />
-      <TableView fx:id="groupTable" layoutX="207.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0">
+      <TableView layoutX="196.0" layoutY="290.0" prefHeight="200.0" prefWidth="494.0" />
+      <TableView fx:id="groupTable" layoutX="197.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0">
         <columns>
           <TableColumn fx:id="group" maxWidth="1.7976931348623157E308" prefWidth="199.20001220703125" text="Групи" />
         </columns>
