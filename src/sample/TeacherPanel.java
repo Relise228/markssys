@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 public class TeacherPanel {
@@ -29,6 +30,12 @@ public class TeacherPanel {
 
     @FXML
     private TableView courseTable;
+
+    @FXML
+    private TableColumn course;
+
+    @FXML
+    private TableColumn group;
 
     @FXML
     void initialize() {

@@ -28,12 +28,12 @@
       <TableView layoutX="187.0" layoutY="290.0" prefHeight="200.0" prefWidth="502.0" />
       <TableView fx:id="groupTable" layoutX="207.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0">
         <columns>
-          <TableColumn maxWidth="1.7976931348623157E308" prefWidth="199.20001220703125" text="Групи" />
+          <TableColumn fx:id="group" maxWidth="1.7976931348623157E308" prefWidth="199.20001220703125" text="Групи" />
         </columns>
       </TableView>
       <TableView fx:id="courseTable" layoutX="489.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0">
         <columns>
-          <TableColumn prefWidth="199.19998168945312" text="Курси" />
+          <TableColumn fx:id="course" prefWidth="199.19998168945312" text="Курси" />
         </columns>
       </TableView>
    </children>
