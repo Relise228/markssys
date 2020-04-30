@@ -42,6 +42,7 @@ public class TeacherPanel {
         ServerAction serv = new ServerAction();
 
         serv.getGroups(group, groupTable);
+        serv.getCourses(course, courseTable);
 
     }
 }

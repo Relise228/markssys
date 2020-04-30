@@ -123,10 +123,10 @@ public class ServerAction {
     }
 
 
-    public String getAllCourses() {
-
+    public void getCourses(TableColumn cellCourses, TableView coursesTable) {
         String msg = "allCourses@";
-        System.out.println(msg);
+
+        // аргументи - повідомлення і адреса сервера
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
@@ -141,15 +141,31 @@ public class ServerAction {
 
                 aSocket.receive(reply);
 
-                String repl = new String(reply.getData());
+                String repl = new String(reply.getData()).trim();
+
+                String[] ph = repl.split("#");
 
 
+                ObservableList<CoursesClass> data = FXCollections.observableArrayList();
 
+                for (String str : ph) {
+                    String[] group = str.split("\\Q|\\E");
+                    for (String dsad : ph) {
+                        System.out.println(dsad);
+                    }
+                    System.out.println("-----------------------------------");
+                    data.add(new CoursesClass(group[1].trim()));
+
+                }
+
+                cellCourses.setCellValueFactory(new PropertyValueFactory<>("courses"));
+
+                coursesTable.setItems(data);
 
 
                 aSocket.close();
 
-                return repl;
+
             } while (msg.trim().equals("quit"));
 
             // помилка при створення socket
@@ -162,7 +178,6 @@ public class ServerAction {
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
         }
-        return null;
     }
 
 }
