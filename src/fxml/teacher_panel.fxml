@@ -6,11 +6,6 @@
 
 <AnchorPane focusTraversable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="534.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.TeacherPanel">
    <children>
-      <Label fx:id="teacherName" layoutX="14.0" layoutY="37.0" prefHeight="24.0" prefWidth="163.0" text="Teacher_name" textAlignment="RIGHT" textOverrun="CENTER_ELLIPSIS">
-         <font>
-            <Font name="Book Antiqua" size="14.0" />
-         </font>
-      </Label>
       <Button fx:id="castButton" layoutX="32.0" layoutY="80.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Скинути">
          <font>
             <Font name="Book Antiqua" size="14.0" />

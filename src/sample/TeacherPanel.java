@@ -14,9 +14,6 @@ public class TeacherPanel {
     private Button reportButton;
 
     @FXML
-    private Label teacherName;
-
-    @FXML
     private Button castButton;
 
     @FXML
@@ -37,8 +34,12 @@ public class TeacherPanel {
     @FXML
     private TableColumn group;
 
+
+
     @FXML
     void initialize() {
-
+        ServerAction serv = new ServerAction();
+        String replyCourse = serv.getAllCourses();
+        String [] arr = replyCourse.split("#");
     }
 }
