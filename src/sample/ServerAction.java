@@ -92,12 +92,7 @@ public class ServerAction {
 
                 for (String str : ph) {
                     String[] group = str.split("\\Q|\\E");
-                    for (String dsad : ph) {
-                        System.out.println(dsad);
-                    }
-                    System.out.println("-----------------------------------");
                     data.add(new GroupsClass( group[1].trim()));
-
                 }
 
                 cellGropups.setCellValueFactory(new PropertyValueFactory<>("groups"));
@@ -121,7 +116,6 @@ public class ServerAction {
             System.out.println("(Client) IO: " + e.getMessage());
         }
     }
-
 
     public void getCourses(TableColumn cellCourses, TableView coursesTable) {
         String msg = "allCourses@";

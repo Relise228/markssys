@@ -1,12 +1,20 @@
 package sample;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 
 public class TeacherPanel {
 
@@ -43,6 +51,26 @@ public class TeacherPanel {
 
         serv.getGroups(group, groupTable);
         serv.getCourses(course, courseTable);
+
+        exitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) exitButton.getScene().getWindow();
+                stage.close();
+
+                Parent root = null;
+                try {
+                    root = FXMLLoader.load(getClass().getResource("../fxml/sample.fxml"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                stage = new Stage();
+                stage.setScene(new Scene(root, 350, 305));
+                stage.setTitle("Log In");
+                stage.show();
+            }
+        });
 
     }
 }
