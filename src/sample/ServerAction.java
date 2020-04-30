@@ -10,14 +10,14 @@ import java.net.SocketException;
 public class ServerAction {
 
     byte serverAddress[] = {127, 0, 0, 1,};
-    int serverPort = 13564;
-    int buffersize = 3000;
+    int serverPort = 6789;
+    int buffersize = 7000;
 
 
     public void logIn(String log, String pass) {
 
         String msg = "login@" + log.trim() + "|" + pass.trim();
-
+        System.out.println(msg);
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
@@ -34,9 +34,9 @@ public class ServerAction {
 
                 String repl = new String(reply.getData());
 
-                if (!repl.trim().equals("")) {
-                    System.out.println("ok" + repl.trim());
-                }
+
+                System.out.println("ok" + repl.trim());
+
 
                 aSocket.close();
                 break;
