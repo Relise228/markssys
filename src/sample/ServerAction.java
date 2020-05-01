@@ -2,17 +2,22 @@ package sample;
 
 
 import info.*;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class ServerAction {
@@ -21,6 +26,7 @@ public class ServerAction {
     byte serverAddress[] = {127, 0, 0, 1,};
     int serverPort = 6788;
     int buffersize = 7000;
+    int selectedIdStudent = 0;
 
 
     public boolean logIn(String log, String pass) {
@@ -410,6 +416,19 @@ public class ServerAction {
     public void getStudentsFullInfo(int idGroup, int idCourse, TableView resultTable) {
         String msg = "getStudentsFullInfo@" + idGroup + "|" + idCourse;
         resultTable.getColumns().clear();
+        resultTable.setEditable(true);
+
+        resultTable.getSelectionModel().selectedItemProperty().addListener((ChangeListener) (observableValue, oldValue, newValue) -> {
+
+            if (resultTable.getSelectionModel().getSelectedItem() != null) {
+                TableView.TableViewSelectionModel selectionModel = resultTable.getSelectionModel();
+                ObservableList selectedRow = selectionModel.getSelectedItems();
+                StudentsFullInfoClass selectedItem = (StudentsFullInfoClass) selectedRow.get(0);
+
+                selectedIdStudent = selectedItem.getIdStudent();
+            }
+        });
+
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
@@ -443,15 +462,65 @@ public class ServerAction {
 
                 for(int i = 0; i <= countColumns - 2; i++){
                     TableColumn tableColumn = new TableColumn<>(nameColumn[i]);
+                    System.out.println(tableColumn.getText());
+                    if(tableColumn.getText() == "Оцінка") {
+                        System.out.println("ok");
+                       tableColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));     //////// Дозвіл на редагування комірки
+
+                        tableColumn.setOnEditCommit(
+                                new EventHandler<TableColumn.CellEditEvent<StudentsFullInfoClass, Integer>>() {
+                                    @Override
+                                    public void handle(TableColumn.CellEditEvent<StudentsFullInfoClass, Integer> t) {
+                                        setMark(idCourse, selectedIdStudent, t.getNewValue());
+                                        getStudentsFullInfo(idGroup, idCourse, resultTable);
+                                    }
+                                }
+                        );
+                    }
                     tableColumn.setCellValueFactory(new PropertyValueFactory<>(identColumn[i]));
                     resultTable.getColumns().add(tableColumn);
                 }
-
 
                 resultTable.setItems(data);
                 resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
                 aSocket.close();
+
+            } while (msg.trim().equals("quit"));
+
+            // помилка при створення socket
+        } catch (
+                SocketException e) {
+            System.out.println("(Client) Socket: " + e.getMessage());
+
+            // помилка при отриманні
+        } catch (
+                IOException e) {
+            System.out.println("(Client) IO: " + e.getMessage());
+        }
+    }
+
+    public void setMark(int idCourse, int idStudent, int mark) {
+        String msg = "updateStudentMark@" + idStudent + "|" + idCourse + "|" + mark;
+
+        // аргументи - повідомлення і адреса сервера
+        try {
+            do {
+                DatagramSocket aSocket = new DatagramSocket();
+                byte[] msgByte = msg.getBytes();
+
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
+
+                DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
+                aSocket.send(request);        //надсилає пакет
+                byte[] buffer = new byte[buffersize];
+                DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+
+                aSocket.receive(reply);
+
+
+                aSocket.close();
+
 
             } while (msg.trim().equals("quit"));
 

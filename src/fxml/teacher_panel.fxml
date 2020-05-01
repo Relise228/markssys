@@ -22,10 +22,7 @@
             <Font name="Book Antiqua" size="14.0" />
          </font>
       </Button>
-      <TableView fx:id="resultTable" layoutX="196.0" layoutY="290.0" prefHeight="200.0" prefWidth="494.0">
-         <columns>
-            <TableColumn fx:id="resultColumn" prefWidth="75.0" />
-         </columns></TableView>
+      <TableView fx:id="resultTable" layoutX="196.0" layoutY="290.0" prefHeight="200.0" prefWidth="494.0" />
       <TableView fx:id="groupTable" layoutX="197.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0">
         <columns>
           <TableColumn fx:id="group" maxWidth="1.7976931348623157E308" prefWidth="199.20001220703125" text="Групи" />

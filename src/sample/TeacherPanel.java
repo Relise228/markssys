@@ -111,7 +111,6 @@ public class TeacherPanel {
             }
         });
 
-
         courseTable.getSelectionModel().selectedItemProperty().addListener((ChangeListener) (observableValue, oldValue, newValue) -> {
 
             if (courseTable.getSelectionModel().getSelectedItem() != null) {
@@ -127,7 +126,6 @@ public class TeacherPanel {
                 } else if (selectedIdCourse != 0) {
                     serv.getStudentsFullInfo(selectedIdGroup, selectedIdCourse, resultTable);
                 }
-
 
             }
         });
