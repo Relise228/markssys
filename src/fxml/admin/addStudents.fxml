@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="171.0" prefWidth="515.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.admin.AddStudent">
+   <children>
+      <ComboBox fx:id="comboBoxGroup" layoutX="162.0" layoutY="14.0" prefHeight="26.0" prefWidth="191.0" promptText="Група" />
+      <TextField fx:id="pibField" layoutX="108.0" layoutY="59.0" prefHeight="26.0" prefWidth="298.0" promptText="ПІБ">
+         <font>
+            <Font name="Book Antiqua" size="14.0" />
+         </font>
+      </TextField>
+      <Button fx:id="addStudentButton" layoutX="168.0" layoutY="107.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="178.0" text="Додати">
+         <font>
+            <Font name="Book Antiqua" size="14.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

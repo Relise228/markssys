@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane focusTraversable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="534.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.TeacherPanel">
+   <children>
+      <Button fx:id="castButton" layoutX="32.0" layoutY="80.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Скинути">
+         <font>
+            <Font name="Book Antiqua" size="14.0" />
+         </font></Button>
+      <Button fx:id="reportButton" layoutX="32.0" layoutY="132.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Звіт">
+         <font>
+            <Font name="Book Antiqua" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="exitButton" layoutX="32.0" layoutY="188.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Вийти">
+         <font>
+            <Font name="Book Antiqua" size="14.0" />
+         </font>
+      </Button>
+      <TableView fx:id="resultTable" layoutX="196.0" layoutY="290.0" prefHeight="200.0" prefWidth="494.0" />
+      <TableView fx:id="groupTable" layoutX="197.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0">
+        <columns>
+          <TableColumn fx:id="group" maxWidth="1.7976931348623157E308" prefWidth="199.20001220703125" text="Групи" />
+        </columns>
+      </TableView>
+      <TableView fx:id="courseTable" layoutX="489.0" layoutY="37.0" prefHeight="200.0" prefWidth="200.0">
+        <columns>
+          <TableColumn fx:id="course" prefWidth="199.19998168945312" text="Курси" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

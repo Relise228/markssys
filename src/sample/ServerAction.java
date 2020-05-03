@@ -6,6 +6,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -17,6 +19,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.sql.SQLOutput;
 
 
 import static sample.Main.serverAddress;
@@ -585,6 +588,98 @@ public class ServerAction {
         }
         return false;
     }
+
+    public boolean checkAdmin() {
+        return this.admin;
+    }
+
+    public void setAllGroupSelect(ComboBox groupSelect) {
+        String msg = "allGroups@";
+
+        // аргументи - повідомлення і адреса сервера
+        try {
+            do {
+                DatagramSocket aSocket = new DatagramSocket();
+                byte[] msgByte = msg.getBytes();
+
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
+
+                DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
+                aSocket.send(request);        //надсилає пакет
+                byte[] buffer = new byte[buffersize];
+                DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+
+                aSocket.receive(reply);
+
+                String repl = new String(reply.getData()).trim();
+
+                String[] ph = repl.split("#");
+
+                ObservableList data = FXCollections.observableArrayList();
+
+                for (String str : ph) {
+                    String[] group = str.split("\\Q|\\E");
+                    data.add(group[1].trim() + " | " + group[0].trim());
+                    System.out.println();
+                }
+
+                groupSelect.setItems(data);
+
+
+
+                aSocket.close();
+
+
+            } while (msg.trim().equals("quit"));
+
+            // помилка при створення socket
+        } catch (
+                SocketException e) {
+            System.out.println("(Client) Socket: " + e.getMessage());
+
+            // помилка при отриманні
+        } catch (
+                IOException e) {
+            System.out.println("(Client) IO: " + e.getMessage());
+        }
+    }
+
+    public void addStudent(int idGroup, String pib) {
+        String msg = "addStudent@" + idGroup + "|" + pib;
+
+        // аргументи - повідомлення і адреса сервера
+        try {
+            do {
+                DatagramSocket aSocket = new DatagramSocket();
+                byte[] msgByte = msg.getBytes();
+
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
+
+                DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
+                aSocket.send(request);        //надсилає пакет
+                byte[] buffer = new byte[buffersize];
+                DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+
+                aSocket.receive(reply);
+
+
+                aSocket.close();
+
+
+            } while (msg.trim().equals("quit"));
+
+            // помилка при створення socket
+        } catch (
+                SocketException e) {
+            System.out.println("(Client) Socket: " + e.getMessage());
+
+            // помилка при отриманні
+        } catch (
+                IOException e) {
+            System.out.println("(Client) IO: " + e.getMessage());
+        }
+    }
+
 
 
 }

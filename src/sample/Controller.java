@@ -45,18 +45,29 @@ public class Controller {
                 if( serv.logIn(usrNameField.getText(), passwordField.getText())) {
                     Stage stage = (Stage) loginButton.getScene().getWindow();
                     stage.close();
-
                     Parent root = null;
-                    try {
-                        root = FXMLLoader.load(getClass().getResource("../fxml/teacher_panel.fxml"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (serv.checkAdmin()) {
+                        try {
+                            root = FXMLLoader.load(getClass().getResource("../fxml/admin/admin_panel.fxml"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        stage = new Stage();
+                        stage.setScene(new Scene(root, 750, 534));
+                        stage.setTitle("Admin Panel");
+                        stage.show();
+                    } else {
+                        try {
+                            root = FXMLLoader.load(getClass().getResource("../fxml/teacher_panel.fxml"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        stage = new Stage();
+                        stage.setScene(new Scene(root, 750, 534));
+                        stage.setTitle("Teacher Panel");
+                        stage.show();
                     }
 
-                    stage = new Stage();
-                    stage.setScene(new Scene(root, 750, 534));
-                    stage.setTitle("Teacher Panel");
-                    stage.show();
                 }
             }
         });
