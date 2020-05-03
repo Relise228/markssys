@@ -17,16 +17,20 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.concurrent.atomic.AtomicInteger;
+
+
+import static sample.Main.serverAddress;
+import static sample.Main.serverPort;
+import static sample.Main.buffersize;
 
 
 public class ServerAction {
-    public int idTeacher;
 
-    byte serverAddress[] = {127, 0, 0, 1,};
-    int serverPort = 6788;
-    int buffersize = 7000;
-    int selectedIdStudent = 0;
+   private int selectedIdStudent = 0;
+   private int idTeacher = 0;
+   private boolean admin = false;
+
+
 
 
     public boolean logIn(String log, String pass) {
@@ -38,22 +42,28 @@ public class ServerAction {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
 
-                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
 
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
 
                 aSocket.receive(reply);
 
-                String repl = new String(reply.getData());
+                String repl = new String(reply.getData()).trim();
+
+                String[] str = repl.split("\\Q|\\E");
 
                 aSocket.close();
 
-                if(repl.trim().equals("1")) {
-                    idTeacher = Integer.parseInt(repl.trim());
-                    System.out.println(repl.trim());
+                if(str.length == 2) {
+                    this.idTeacher = Integer.parseInt(str[0].trim());
+                    System.out.println("ID TEACHER - " + this.idTeacher);
+                    if (str[1].equals("Admin")) {
+                        this.admin = true;
+                        System.out.println(this.admin);
+                    }
                     return true;
                 }
                 break;
@@ -73,7 +83,10 @@ public class ServerAction {
     }
 
     public void getGroups(TableColumn cellGropups, TableView groupTabel) {
+
         String msg = "allGroups@";
+        System.out.println(this.idTeacher + "      ////////////////////////////////////////////////////");
+        System.out.println(admin + "      ////////////////////////////////////////////////////");
 
         // аргументи - повідомлення і адреса сервера
         try {
@@ -93,7 +106,6 @@ public class ServerAction {
                 String repl = new String(reply.getData()).trim();
 
                 String[] ph = repl.split("#");
-
 
                 ObservableList<GroupsClass> data = FXCollections.observableArrayList();
 
@@ -462,8 +474,8 @@ public class ServerAction {
 
                 for(int i = 0; i <= countColumns - 2; i++){
                     TableColumn tableColumn = new TableColumn<>(nameColumn[i]);
-                    System.out.println(tableColumn.getText());
-                    if(tableColumn.getText() == "Оцінка") {
+                    System.out.println(this.checkTeacherCourseReading(idGroup, idCourse, this.idTeacher) + "   wwwwwwwwwwwwwwwwwwwwwwwwwwww");
+                    if(tableColumn.getText() == "Оцінка" && this.checkTeacherCourseReading(idGroup, idCourse, this.idTeacher)) {
                         System.out.println("ok");
                        tableColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));     //////// Дозвіл на редагування комірки
 
@@ -536,7 +548,43 @@ public class ServerAction {
         }
     }
 
+    public boolean checkTeacherCourseReading(int idGroup, int idCourse, int idTeacher) {
+        String msg = "checkTeacherCourseReading@" + idGroup + "|" + idCourse + "|" + idTeacher;
 
+        try {
+            do {
+                DatagramSocket aSocket = new DatagramSocket();
+                byte[] msgByte = msg.getBytes();
+
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
+
+                DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
+                aSocket.send(request);        //надсилає пакет
+                byte[] buffer = new byte[buffersize];
+                DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+
+                aSocket.receive(reply);
+                String repl = new String(reply.getData()).trim();
+                System.out.println(repl);
+
+                aSocket.close();
+                System.out.println(repl);
+                if(Integer.parseInt(repl.trim()) == 1) return true;
+
+            } while (msg.trim().equals("quit"));
+
+            // помилка при створення socket
+        } catch (
+                SocketException e) {
+            System.out.println("(Client) Socket: " + e.getMessage());
+
+            // помилка при отриманні
+        } catch (
+                IOException e) {
+            System.out.println("(Client) IO: " + e.getMessage());
+        }
+        return false;
+    }
 
 
 }

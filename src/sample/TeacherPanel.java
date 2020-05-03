@@ -18,6 +18,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
+import static sample.Main.serv;
+
 public class TeacherPanel {
 
     @FXML
@@ -58,8 +60,6 @@ public class TeacherPanel {
         groupTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         courseTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-
-        ServerAction serv = new ServerAction();
 
         serv.getGroups(group, groupTable);
         serv.getCourses(course, courseTable);

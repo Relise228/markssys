@@ -8,9 +8,10 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    static byte serverAddress[] = {127, 0, 0, 1,};
-    int serverPort = 13564;
-    int buffersize = 3000;
+    protected static byte serverAddress[] = {127, 0, 0, 1,};
+    protected static int serverPort = 6788;
+    protected static int buffersize = 7000;
+    protected static ServerAction serv = new ServerAction();
 
 
     @Override
@@ -41,8 +42,6 @@ public class Main extends Application {
 
     public static void main(String[] args)
     {
-
-
         launch(args);
     }
 }

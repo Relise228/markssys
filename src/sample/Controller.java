@@ -15,6 +15,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import static sample.Main.serv;
+
 public class Controller {
 
     @FXML
@@ -35,12 +37,12 @@ public class Controller {
     @FXML
     void initialize() {
 
-        ServerAction serv = new ServerAction();
+
 
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if(serv.logIn(usrNameField.getText(), passwordField.getText())) {
+                if( serv.logIn(usrNameField.getText(), passwordField.getText())) {
                     Stage stage = (Stage) loginButton.getScene().getWindow();
                     stage.close();
 
