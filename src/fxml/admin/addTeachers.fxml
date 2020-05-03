@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="271.0" prefWidth="505.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.admin.addTeacher">
+   <children>
+      <TextField fx:id="pibField" focusTraversable="false" layoutX="116.0" layoutY="168.0" prefHeight="28.0" prefWidth="267.0" promptText="ПІБ">
+         <font>
+            <Font name="Book Antiqua" size="14.0" />
+         </font>
+      </TextField>
+      <Button fx:id="addTeacherButton" layoutX="163.0" layoutY="217.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="178.0" text="Додати">
+         <font>
+            <Font name="Book Antiqua" size="14.0" />
+         </font>
+      </Button>
+      <TextField fx:id="loginField" layoutX="192.0" layoutY="49.0" prefHeight="26.0" prefWidth="192.0" promptText="Логін">
+         <font>
+            <Font name="Book Antiqua" size="14.0" />
+         </font>
+      </TextField>
+      <Label layoutX="120.0" layoutY="54.0" text="Логін">
+         <font>
+            <Font name="Book Antiqua" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="120.0" layoutY="113.0" prefHeight="18.0" prefWidth="57.0" text="Пароль">
+         <font>
+            <Font name="Book Antiqua" size="14.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="passwordField" layoutX="192.0" layoutY="107.0" prefHeight="26.0" prefWidth="192.0" promptText="Пароль">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </PasswordField>
+   </children>
+</AnchorPane>

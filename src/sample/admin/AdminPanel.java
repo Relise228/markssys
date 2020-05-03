@@ -91,12 +91,13 @@ public class AdminPanel {
         exitButton.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                serv.setAdmin(false);
                 Stage stage = (Stage) exitButton.getScene().getWindow();
                 stage.close();
 
                 Parent root = null;
                 try {
-                    root = FXMLLoader.load(getClass().getResource("../fxml/sample.fxml"));
+                    root = FXMLLoader.load(getClass().getResource("../../fxml/sample.fxml"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -112,7 +113,7 @@ public class AdminPanel {
             @Override
             public void handle(ActionEvent actionEvent) {
                 FXMLLoader Loader = new FXMLLoader();
-                Loader.setLocation(getClass().getResource("../fxml/addStudents.fxml"));
+                Loader.setLocation(getClass().getResource("../../fxml/admin/addStudents.fxml"));
                 try {
                     Loader.load();
                 } catch (IOException e) {
@@ -122,6 +123,24 @@ public class AdminPanel {
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
                 stage.setTitle("Add Student");
+                stage.show();
+            }
+        });
+
+        addTeacherButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                FXMLLoader Loader = new FXMLLoader();
+                Loader.setLocation(getClass().getResource("../../fxml/admin/addTeachers.fxml"));
+                try {
+                    Loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Parent root = Loader.getRoot();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Add Teacher");
                 stage.show();
             }
         });

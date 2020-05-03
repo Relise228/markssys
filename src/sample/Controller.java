@@ -37,8 +37,6 @@ public class Controller {
     @FXML
     void initialize() {
 
-
-
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {

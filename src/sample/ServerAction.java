@@ -33,10 +33,11 @@ public class ServerAction {
    private int idTeacher = 0;
    private boolean admin = false;
 
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
 
-
-
-    public boolean logIn(String log, String pass) {
+    boolean logIn(String log, String pass) {
 
         String msg = "login@" + log.trim() + "|" + pass.trim();
         System.out.println(msg);
@@ -515,7 +516,7 @@ public class ServerAction {
         }
     }
 
-    public void setMark(int idCourse, int idStudent, int mark) {
+    private void setMark(int idCourse, int idStudent, int mark) {
         String msg = "updateStudentMark@" + idStudent + "|" + idCourse + "|" + mark;
 
         // аргументи - повідомлення і адреса сервера
@@ -551,7 +552,7 @@ public class ServerAction {
         }
     }
 
-    public boolean checkTeacherCourseReading(int idGroup, int idCourse, int idTeacher) {
+    private boolean checkTeacherCourseReading(int idGroup, int idCourse, int idTeacher) {
         String msg = "checkTeacherCourseReading@" + idGroup + "|" + idCourse + "|" + idTeacher;
 
         try {
@@ -589,7 +590,7 @@ public class ServerAction {
         return false;
     }
 
-    public boolean checkAdmin() {
+    boolean checkAdmin() {
         return this.admin;
     }
 
@@ -646,34 +647,46 @@ public class ServerAction {
 
     public void addStudent(int idGroup, String pib) {
         String msg = "addStudent@" + idGroup + "|" + pib;
-
-        // аргументи - повідомлення і адреса сервера
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-
-                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
-
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
                 aSocket.send(request);        //надсилає пакет
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-
                 aSocket.receive(reply);
-
-
                 aSocket.close();
-
-
             } while (msg.trim().equals("quit"));
-
-            // помилка при створення socket
         } catch (
                 SocketException e) {
             System.out.println("(Client) Socket: " + e.getMessage());
 
             // помилка при отриманні
+        } catch (
+                IOException e) {
+            System.out.println("(Client) IO: " + e.getMessage());
+        }
+    }
+
+    public void addTeacher(String pib, String login, String password) {
+        String msg = "addTeacher@" + pib + "|" + login + "|" + password;
+        try {
+            do {
+                DatagramSocket aSocket = new DatagramSocket();
+                byte[] msgByte = msg.getBytes();
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
+                DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
+                aSocket.send(request);        //надсилає пакет
+                byte[] buffer = new byte[buffersize];
+                DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+                aSocket.receive(reply);
+                aSocket.close();
+            } while (msg.trim().equals("quit"));
+        } catch (
+                SocketException e) {
+            System.out.println("(Client) Socket: " + e.getMessage());
         } catch (
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
