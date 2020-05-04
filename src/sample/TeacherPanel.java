@@ -102,8 +102,18 @@ public class TeacherPanel {
                 selectedIdGroup = selectedItem.getId();
 
                 if (selectedIdCourse == 0 ) {
-                    serv.getCoursesByGroup(selectedIdGroup, course, courseTable);
-                    serv.getStudentNamesByGroup(selectedIdGroup, resultTable);
+                    try {
+                        serv.getStudentNamesByGroup(selectedIdGroup, resultTable);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Немає студентів");
+                    }
+
+                    try {
+                        serv.getCoursesByGroup(selectedIdGroup, course, courseTable);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Немає курсів");
+                    }
+
                 } else if (selectedIdGroup != 0) {
                     serv.getStudentsFullInfo(selectedIdGroup, selectedIdCourse, resultTable);
                 }
@@ -121,8 +131,16 @@ public class TeacherPanel {
                 selectedIdCourse = selectedItem.getIdCourse();
 
                 if (selectedIdGroup == 0 ) {
-                    serv.getGroupsByCourse(selectedIdCourse, group, groupTable);
-                    serv.getGroupsFullInfo(selectedIdCourse, resultTable);
+                    try {
+                        serv.getGroupsByCourse(selectedIdCourse, group, groupTable);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Немає Груп у курсі");
+                    }
+                    try {
+                        serv.getGroupsFullInfo(selectedIdCourse, resultTable);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Немає інформації");
+                    }
                 } else if (selectedIdCourse != 0) {
                     serv.getStudentsFullInfo(selectedIdGroup, selectedIdCourse, resultTable);
                 }

@@ -2,6 +2,7 @@ package sample.admin;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLOutput;
 import java.util.ResourceBundle;
 
 import info.CoursesClass;
@@ -145,6 +146,25 @@ public class AdminPanel {
             }
         });
 
+        addGroupButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                FXMLLoader Loader = new FXMLLoader();
+                Loader.setLocation(getClass().getResource("../../fxml/admin/addGroup.fxml"));
+                try {
+                    Loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Parent root = Loader.getRoot();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setResizable(false);
+                stage.setTitle("Add Group");
+                stage.show();
+            }
+        });
+
         groupTable.getSelectionModel().selectedItemProperty().addListener((ChangeListener) (observableValue, oldValue, newValue) -> {
 
             if (groupTable.getSelectionModel().getSelectedItem() != null) {
@@ -155,12 +175,20 @@ public class AdminPanel {
                 selectedIdGroup = selectedItem.getId();
 
                 if (selectedIdCourse == 0 ) {
-                    serv.getCoursesByGroup(selectedIdGroup, course, courseTable);
-                    serv.getStudentNamesByGroup(selectedIdGroup, resultTable);
+                    try {
+                        serv.getStudentNamesByGroup(selectedIdGroup, resultTable);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Немає студентів");
+                    }
+
+                    try {
+                        serv.getCoursesByGroup(selectedIdGroup, course, courseTable);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Немає курсів");
+                    }
                 } else if (selectedIdGroup != 0) {
                     serv.getStudentsFullInfo(selectedIdGroup, selectedIdCourse, resultTable);
                 }
-
             }
         });
 
@@ -174,10 +202,23 @@ public class AdminPanel {
                 selectedIdCourse = selectedItem.getIdCourse();
 
                 if (selectedIdGroup == 0 ) {
-                    serv.getGroupsByCourse(selectedIdCourse, group, groupTable);
-                    serv.getGroupsFullInfo(selectedIdCourse, resultTable);
+                    try {
+                        serv.getGroupsByCourse(selectedIdCourse, group, groupTable);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Немає Груп у курсі");
+                    }
+
+                    try {
+                        serv.getGroupsFullInfo(selectedIdCourse, resultTable);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Немає інформації");
+                    }
                 } else if (selectedIdCourse != 0) {
-                    serv.getStudentsFullInfo(selectedIdGroup, selectedIdCourse, resultTable);
+                    try {
+                        serv.getStudentsFullInfo(selectedIdGroup, selectedIdCourse, resultTable);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Немає інформації");
+                    }
                 }
 
             }

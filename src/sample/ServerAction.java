@@ -199,29 +199,19 @@ public class ServerAction {
 
     public void getCoursesByGroup(int idGroup, TableColumn cellCourses, TableView coursesTable) {
         String msg = "getCoursesByGroup@" + idGroup;
-
-        // аргументи - повідомлення і адреса сервера
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-
                 InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
-
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
                 aSocket.send(request);        //надсилає пакет
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-
                 aSocket.receive(reply);
-
                 String repl = new String(reply.getData()).trim();
-
                 String[] ph = repl.split("#");
-
-
                 ObservableList<CoursesClass> data = FXCollections.observableArrayList();
-
                 for (String str : ph) {
                     String[] group = str.split("\\Q|\\E");
                     for (String dsad : ph) {
@@ -229,17 +219,10 @@ public class ServerAction {
                     }
                     System.out.println("-----------------------------------");
                     data.add(new CoursesClass(group[1].trim(), Integer.parseInt(group[0].trim())));
-
                 }
-
                 cellCourses.setCellValueFactory(new PropertyValueFactory<>("courses"));
-
                 coursesTable.setItems(data);
-
-
                 aSocket.close();
-
-
             } while (msg.trim().equals("quit"));
 
             // помилка при створення socket
@@ -369,30 +352,27 @@ public class ServerAction {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-
                 InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
-
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
                 aSocket.send(request);        //надсилає пакет
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-
                 aSocket.receive(reply);
-
                 String repl = new String(reply.getData()).trim();
-
                 String[] ph = repl.split("#");
-
-
                 ObservableList<GroupsAllInfoClass> data = FXCollections.observableArrayList();
                 int countColumns = 0;
                 for (String str : ph) {
                     String[] group = str.split("\\Q|\\E");
                     countColumns = group.length;
-                    data.add(new GroupsAllInfoClass( Integer.parseInt(group[0].trim()),
-                            group[1].trim(), Integer.parseInt(group[2].trim()),
-                            Integer.parseInt(group[3].trim()),
-                            Integer.parseInt(group[4].trim())));
+                    try {
+                        data.add(new GroupsAllInfoClass( Integer.parseInt(group[0].trim()),
+                                group[1].trim(), Integer.parseInt(group[2].trim()),
+                                Integer.parseInt(group[3].trim()),
+                                Integer.parseInt(group[4].trim())));
+                    } catch (NumberFormatException e) {
+
+                    }
                 }
                 String[] identColumn = {"nameGroup", "year", "studentCount", "avgMark"};
                 String[] nameColumn = {"Группа", "Рік", "К-сть студентів", "Рейт. бал"};
@@ -402,14 +382,6 @@ public class ServerAction {
                     tableColumn.setCellValueFactory(new PropertyValueFactory<>(identColumn[i]));
                     resultTable.getColumns().add(tableColumn);
                 }
-
-
-
-
-//                resultColumn.setText("Student Name");
-//                resultColumn.setMinWidth(494);
-//                resultColumn.setCellValueFactory(new PropertyValueFactory<>("nameGroup"));
-//
                 resultTable.setItems(data);
                 resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -449,29 +421,26 @@ public class ServerAction {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-
                 InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
-
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
                 aSocket.send(request);        //надсилає пакет
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-
                 aSocket.receive(reply);
-
                 String repl = new String(reply.getData()).trim();
-
                 String[] ph = repl.split("#");
-
-
                 ObservableList<StudentsFullInfoClass> data = FXCollections.observableArrayList();
                 int countColumns = 0;
                 for (String str : ph) {
                     String[] student = str.split("\\Q|\\E");
                     countColumns = student.length;
-                    data.add(new StudentsFullInfoClass(Integer.parseInt(student[0].trim()),
-                            student[1].trim(),
-                            Integer.parseInt(student[2].trim())));
+                    try {
+                        data.add(new StudentsFullInfoClass(Integer.parseInt(student[0].trim()),
+                                student[1].trim(),
+                                Integer.parseInt(student[2].trim())));
+                    } catch (NumberFormatException e) {
+
+                    }
                 }
                 String[] identColumn = {"nameStudent", "markStudent"};
                 String[] nameColumn = {"ПІБ", "Оцінка"};
@@ -692,6 +661,30 @@ public class ServerAction {
             System.out.println("(Client) IO: " + e.getMessage());
         }
     }
+
+    public void addGroup(String nameGroup, String year) {
+        String msg = "addGroup@" + nameGroup + "|" + year;
+        try {
+            do {
+                DatagramSocket aSocket = new DatagramSocket();
+                byte[] msgByte = msg.getBytes();
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
+                DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
+                aSocket.send(request);        //надсилає пакет
+                byte[] buffer = new byte[buffersize];
+                DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+                aSocket.receive(reply);
+                aSocket.close();
+            } while (msg.trim().equals("quit"));
+        } catch (
+                SocketException e) {
+            System.out.println("(Client) Socket: " + e.getMessage());
+        } catch (
+                IOException e) {
+            System.out.println("(Client) IO: " + e.getMessage());
+        }
+    }
+
 
 
 
