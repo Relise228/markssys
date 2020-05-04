@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 
 import static sample.Main.serv;
 
-public class AddGroup {
+public class AddCourse {
 
     @FXML
     private ResourceBundle resources;
@@ -22,32 +22,32 @@ public class AddGroup {
     private URL location;
 
     @FXML
-    private TextField yearField;
+    private TextField hoursField;
 
     @FXML
-    private Button addGroupButton;
+    private Button addCourseButton;
 
     @FXML
-    private TextField groupNameField;
+    private TextField courseNameField;
 
     @FXML
     void initialize() {
-        yearField.textProperty().addListener(new ChangeListener<String>() {
+        hoursField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 if (!newValue.matches("\\d*")) {
-                    yearField.setText(newValue.replaceAll("[^\\d]", ""));
+                    hoursField.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });
 
-        addGroupButton.setOnAction(new EventHandler<ActionEvent>() {
+        addCourseButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if(yearField.getText().length() == 4 && !yearField.getText().equals("") && !groupNameField.getText().equals("")) {
-                    serv.addGroup(groupNameField.getText(), yearField.getText());
-                    groupNameField.setText("");
-                    yearField.setText("");
+                if(!hoursField.getText().equals("") && !courseNameField.getText().equals("")) {
+                    serv.addCourse(courseNameField.getText(), hoursField.getText());
+                    courseNameField.setText("");
+                    hoursField.setText("");
                 }
             }
         });

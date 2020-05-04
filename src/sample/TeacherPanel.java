@@ -92,6 +92,25 @@ public class TeacherPanel {
             }
         });
 
+        reportButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                FXMLLoader Loader = new FXMLLoader();
+                Loader.setLocation(getClass().getResource("../fxml/report_panel.fxml"));
+                try {
+                    Loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Parent root = Loader.getRoot();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setResizable(false);
+                stage.setTitle("Report");
+                stage.show();
+            }
+        });
+
         groupTable.getSelectionModel().selectedItemProperty().addListener((ChangeListener) (observableValue, oldValue, newValue) -> {
 
             if (groupTable.getSelectionModel().getSelectedItem() != null) {

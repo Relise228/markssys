@@ -14,12 +14,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.IntegerStringConverter;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.sql.SQLOutput;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 import static sample.Main.serverAddress;
@@ -38,47 +43,33 @@ public class ServerAction {
     }
 
     boolean logIn(String log, String pass) {
-
         String msg = "login@" + log.trim() + "|" + pass.trim();
-        System.out.println(msg);
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-
                 InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
-
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
                 aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-
                 aSocket.receive(reply);
-
                 String repl = new String(reply.getData()).trim();
-
                 String[] str = repl.split("\\Q|\\E");
-
                 aSocket.close();
 
                 if(str.length == 2) {
                     this.idTeacher = Integer.parseInt(str[0].trim());
-                    System.out.println("ID TEACHER - " + this.idTeacher);
                     if (str[1].equals("Admin")) {
                         this.admin = true;
-                        System.out.println(this.admin);
                     }
                     return true;
                 }
                 break;
             } while (msg.trim().equals("quit"));
-
-            // помилка при створення socket
         } catch (
                 SocketException e) {
             System.out.println("(Client) Socket: " + e.getMessage());
-
-            // помилка при отриманні
         } catch (
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
@@ -87,28 +78,18 @@ public class ServerAction {
     }
 
     public void getGroups(TableColumn cellGropups, TableView groupTabel) {
-
         String msg = "allGroups@";
-        System.out.println(this.idTeacher + "      ////////////////////////////////////////////////////");
-        System.out.println(admin + "      ////////////////////////////////////////////////////");
-
-        // аргументи - повідомлення і адреса сервера
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-
-                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
-
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-
                 aSocket.receive(reply);
-
                 String repl = new String(reply.getData()).trim();
-
                 String[] ph = repl.split("#");
 
                 ObservableList<GroupsClass> data = FXCollections.observableArrayList();
@@ -121,19 +102,11 @@ public class ServerAction {
                 cellGropups.setCellValueFactory(new PropertyValueFactory<>("groups"));
 
                 groupTabel.setItems(data);
-
-
                 aSocket.close();
-
-
             } while (msg.trim().equals("quit"));
-
-            // помилка при створення socket
         } catch (
                 SocketException e) {
             System.out.println("(Client) Socket: " + e.getMessage());
-
-            // помилка при отриманні
         } catch (
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
@@ -142,55 +115,34 @@ public class ServerAction {
 
     public void getCourses(TableColumn cellCourses, TableView coursesTable) {
         String msg = "allCourses@";
-
-        // аргументи - повідомлення і адреса сервера
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-
-                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
-
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-
                 aSocket.receive(reply);
-
                 String repl = new String(reply.getData()).trim();
-
                 String[] ph = repl.split("#");
-
 
                 ObservableList<CoursesClass> data = FXCollections.observableArrayList();
 
                 for (String str : ph) {
                     String[] group = str.split("\\Q|\\E");
-                    for (String dsad : ph) {
-                        System.out.println(dsad);
-                    }
-                    System.out.println("-----------------------------------");
                     data.add(new CoursesClass(group[1].trim(), Integer.parseInt(group[0].trim())));
-
                 }
 
                 cellCourses.setCellValueFactory(new PropertyValueFactory<>("courses"));
 
                 coursesTable.setItems(data);
-
-
                 aSocket.close();
-
-
             } while (msg.trim().equals("quit"));
-
-            // помилка при створення socket
         } catch (
                 SocketException e) {
             System.out.println("(Client) Socket: " + e.getMessage());
-
-            // помилка при отриманні
         } catch (
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
@@ -203,9 +155,9 @@ public class ServerAction {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
                 aSocket.receive(reply);
@@ -214,23 +166,15 @@ public class ServerAction {
                 ObservableList<CoursesClass> data = FXCollections.observableArrayList();
                 for (String str : ph) {
                     String[] group = str.split("\\Q|\\E");
-                    for (String dsad : ph) {
-                        System.out.println(dsad);
-                    }
-                    System.out.println("-----------------------------------");
                     data.add(new CoursesClass(group[1].trim(), Integer.parseInt(group[0].trim())));
                 }
                 cellCourses.setCellValueFactory(new PropertyValueFactory<>("courses"));
                 coursesTable.setItems(data);
                 aSocket.close();
             } while (msg.trim().equals("quit"));
-
-            // помилка при створення socket
         } catch (
                 SocketException e) {
             System.out.println("(Client) Socket: " + e.getMessage());
-
-            // помилка при отриманні
         } catch (
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
@@ -240,52 +184,37 @@ public class ServerAction {
     public void getStudentNamesByGroup(int idGroup,  TableView resultTable) {
         resultTable.getColumns().clear();
         String msg = "getStudentNamesByGroup@" + idGroup;
-
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-
-                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
-
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-
                 aSocket.receive(reply);
-
                 String repl = new String(reply.getData()).trim();
-
                 String[] ph = repl.split("#");
-
 
                 ObservableList<StudentNameClass> data = FXCollections.observableArrayList();
 
                 for (String str : ph) {
-                    System.out.println(str);
                     data.add(new StudentNameClass(str.trim()));
                 }
 
                 TableColumn tableColumn = new TableColumn<>("Student Name");
                 tableColumn.setCellValueFactory(new PropertyValueFactory<>("studentName"));
                 resultTable.getColumns().add(tableColumn);
-
                 tableColumn.setMinWidth(494);
 
                 resultTable.setItems(data);
                 resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
                 aSocket.close();
-
             } while (msg.trim().equals("quit"));
-
-            // помилка при створення socket
         } catch (
                 SocketException e) {
             System.out.println("(Client) Socket: " + e.getMessage());
-
-            // помилка при отриманні
         } catch (
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
@@ -294,26 +223,18 @@ public class ServerAction {
 
     public void getGroupsByCourse(int idCourse, TableColumn cellGroups, TableView groupTabel) {
         String msg = "getGroupsByCourse@" + idCourse;
-
-        // аргументи - повідомлення і адреса сервера
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-
-                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
-
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-
                 aSocket.receive(reply);
-
                 String repl = new String(reply.getData()).trim();
-
                 String[] ph = repl.split("#");
-
 
                 ObservableList<GroupsClass> data = FXCollections.observableArrayList();
 
@@ -326,19 +247,11 @@ public class ServerAction {
                 cellGroups.setCellValueFactory(new PropertyValueFactory<>("groups"));
 
                 groupTabel.setItems(data);
-
-
                 aSocket.close();
-
-
             } while (msg.trim().equals("quit"));
-
-            // помилка при створення socket
         } catch (
                 SocketException e) {
             System.out.println("(Client) Socket: " + e.getMessage());
-
-            // помилка при отриманні
         } catch (
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
@@ -347,14 +260,13 @@ public class ServerAction {
 
     public void  getGroupsFullInfo(int idCourse, TableView resultTable) {
         String msg = "getGroupsFullInfo@" + idCourse;
-
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
                 aSocket.receive(reply);
@@ -384,17 +296,11 @@ public class ServerAction {
                 }
                 resultTable.setItems(data);
                 resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
                 aSocket.close();
-
             } while (msg.trim().equals("quit"));
-
-            // помилка при створення socket
         } catch (
                 SocketException e) {
             System.out.println("(Client) Socket: " + e.getMessage());
-
-            // помилка при отриманні
         } catch (
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
@@ -405,9 +311,7 @@ public class ServerAction {
         String msg = "getStudentsFullInfo@" + idGroup + "|" + idCourse;
         resultTable.getColumns().clear();
         resultTable.setEditable(true);
-
         resultTable.getSelectionModel().selectedItemProperty().addListener((ChangeListener) (observableValue, oldValue, newValue) -> {
-
             if (resultTable.getSelectionModel().getSelectedItem() != null) {
                 TableView.TableViewSelectionModel selectionModel = resultTable.getSelectionModel();
                 ObservableList selectedRow = selectionModel.getSelectedItems();
@@ -416,14 +320,13 @@ public class ServerAction {
                 selectedIdStudent = selectedItem.getIdStudent();
             }
         });
-
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
                 aSocket.receive(reply);
@@ -439,7 +342,6 @@ public class ServerAction {
                                 student[1].trim(),
                                 Integer.parseInt(student[2].trim())));
                     } catch (NumberFormatException e) {
-
                     }
                 }
                 String[] identColumn = {"nameStudent", "markStudent"};
@@ -447,10 +349,8 @@ public class ServerAction {
 
                 for(int i = 0; i <= countColumns - 2; i++){
                     TableColumn tableColumn = new TableColumn<>(nameColumn[i]);
-                    System.out.println(this.checkTeacherCourseReading(idGroup, idCourse, this.idTeacher) + "   wwwwwwwwwwwwwwwwwwwwwwwwwwww");
                     if(tableColumn.getText() == "Оцінка" && this.checkTeacherCourseReading(idGroup, idCourse, this.idTeacher)) {
-                        System.out.println("ok");
-                       tableColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));     //////// Дозвіл на редагування комірки
+                       tableColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 
                         tableColumn.setOnEditCommit(
                                 new EventHandler<TableColumn.CellEditEvent<StudentsFullInfoClass, Integer>>() {
@@ -465,20 +365,14 @@ public class ServerAction {
                     tableColumn.setCellValueFactory(new PropertyValueFactory<>(identColumn[i]));
                     resultTable.getColumns().add(tableColumn);
                 }
-
                 resultTable.setItems(data);
                 resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
                 aSocket.close();
-
             } while (msg.trim().equals("quit"));
 
-            // помилка при створення socket
         } catch (
                 SocketException e) {
             System.out.println("(Client) Socket: " + e.getMessage());
-
-            // помилка при отриманні
         } catch (
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
@@ -487,34 +381,21 @@ public class ServerAction {
 
     private void setMark(int idCourse, int idStudent, int mark) {
         String msg = "updateStudentMark@" + idStudent + "|" + idCourse + "|" + mark;
-
-        // аргументи - повідомлення і адреса сервера
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-
-                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
-
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-
                 aSocket.receive(reply);
-
-
                 aSocket.close();
-
-
             } while (msg.trim().equals("quit"));
-
-            // помилка при створення socket
         } catch (
                 SocketException e) {
             System.out.println("(Client) Socket: " + e.getMessage());
-
-            // помилка при отриманні
         } catch (
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
@@ -523,35 +404,24 @@ public class ServerAction {
 
     private boolean checkTeacherCourseReading(int idGroup, int idCourse, int idTeacher) {
         String msg = "checkTeacherCourseReading@" + idGroup + "|" + idCourse + "|" + idTeacher;
-
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-
-                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
-
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-
                 aSocket.receive(reply);
                 String repl = new String(reply.getData()).trim();
-                System.out.println(repl);
-
                 aSocket.close();
-                System.out.println(repl);
                 if(Integer.parseInt(repl.trim()) == 1) return true;
-
             } while (msg.trim().equals("quit"));
 
-            // помилка при створення socket
         } catch (
                 SocketException e) {
             System.out.println("(Client) Socket: " + e.getMessage());
-
-            // помилка при отриманні
         } catch (
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
@@ -565,24 +435,17 @@ public class ServerAction {
 
     public void setAllGroupSelect(ComboBox groupSelect) {
         String msg = "allGroups@";
-
-        // аргументи - повідомлення і адреса сервера
         try {
             do {
                 DatagramSocket aSocket = new DatagramSocket();
                 byte[] msgByte = msg.getBytes();
-
-                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress); // створення объекту за IP-адресою
-
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-
                 aSocket.receive(reply);
-
                 String repl = new String(reply.getData()).trim();
-
                 String[] ph = repl.split("#");
 
                 ObservableList data = FXCollections.observableArrayList();
@@ -590,24 +453,14 @@ public class ServerAction {
                 for (String str : ph) {
                     String[] group = str.split("\\Q|\\E");
                     data.add(group[1].trim() + " | " + group[0].trim());
-                    System.out.println();
                 }
 
                 groupSelect.setItems(data);
-
-
-
                 aSocket.close();
-
-
             } while (msg.trim().equals("quit"));
-
-            // помилка при створення socket
         } catch (
                 SocketException e) {
             System.out.println("(Client) Socket: " + e.getMessage());
-
-            // помилка при отриманні
         } catch (
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
@@ -622,7 +475,7 @@ public class ServerAction {
                 byte[] msgByte = msg.getBytes();
                 InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
                 aSocket.receive(reply);
@@ -631,8 +484,6 @@ public class ServerAction {
         } catch (
                 SocketException e) {
             System.out.println("(Client) Socket: " + e.getMessage());
-
-            // помилка при отриманні
         } catch (
                 IOException e) {
             System.out.println("(Client) IO: " + e.getMessage());
@@ -647,7 +498,7 @@ public class ServerAction {
                 byte[] msgByte = msg.getBytes();
                 InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
                 aSocket.receive(reply);
@@ -670,7 +521,7 @@ public class ServerAction {
                 byte[] msgByte = msg.getBytes();
                 InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
                 DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
-                aSocket.send(request);        //надсилає пакет
+                aSocket.send(request);
                 byte[] buffer = new byte[buffersize];
                 DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
                 aSocket.receive(reply);
@@ -684,6 +535,228 @@ public class ServerAction {
             System.out.println("(Client) IO: " + e.getMessage());
         }
     }
+
+    public void addCourse(String nameCourse, String hours){
+        String msg = "addCourse@" + nameCourse + "|" + hours;
+        try {
+            do {
+                DatagramSocket aSocket = new DatagramSocket();
+                byte[] msgByte = msg.getBytes();
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
+                DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
+                aSocket.send(request);
+                byte[] buffer = new byte[buffersize];
+                DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+                aSocket.receive(reply);
+                aSocket.close();
+            } while (msg.trim().equals("quit"));
+        } catch (
+                SocketException e) {
+            System.out.println("(Client) Socket: " + e.getMessage());
+        } catch (
+                IOException e) {
+            System.out.println("(Client) IO: " + e.getMessage());
+        }
+    }
+
+    public void notAddedCourses(int idGroup, ComboBox courseSelect) {
+        String msg = "notAddedCourses@" + idGroup;
+        try {
+            do {
+                DatagramSocket aSocket = new DatagramSocket();
+                byte[] msgByte = msg.getBytes();
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
+                DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
+                aSocket.send(request);
+                byte[] buffer = new byte[buffersize];
+                DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+                aSocket.receive(reply);
+                String repl = new String(reply.getData()).trim();
+                String[] ph = repl.split("#");
+
+                ObservableList data = FXCollections.observableArrayList();
+
+                for (String str : ph) {
+                    String[] course = str.split("\\Q|\\E");
+                    data.add(course[1].trim() + " | " + course[0].trim());
+                }
+
+                courseSelect.setItems(data);
+
+                aSocket.close();
+            } while (msg.trim().equals("quit"));
+        } catch (
+                SocketException e) {
+            System.out.println("(Client) Socket: " + e.getMessage());
+        } catch (
+                IOException e) {
+            System.out.println("(Client) IO: " + e.getMessage());
+        }
+    }
+
+    public void getAllTeachers(ComboBox teachersCombo) {
+        String msg = "allTeachers@";
+        try {
+            do {
+                DatagramSocket aSocket = new DatagramSocket();
+                byte[] msgByte = msg.getBytes();
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
+                DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
+                aSocket.send(request);
+                byte[] buffer = new byte[buffersize];
+                DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+                aSocket.receive(reply);
+                String repl = new String(reply.getData()).trim();
+                String[] ph = repl.split("#");
+
+                ObservableList data = FXCollections.observableArrayList();
+
+                for (String str : ph) {
+                    String[] course = str.split("\\Q|\\E");
+                    data.add(course[1].trim() + " | " + course[0].trim());
+                }
+                teachersCombo.setItems(data);
+                aSocket.close();
+            } while (msg.trim().equals("quit"));
+        } catch (
+                SocketException e) {
+            System.out.println("(Client) Socket: " + e.getMessage());
+        } catch (
+                IOException e) {
+            System.out.println("(Client) IO: " + e.getMessage());
+        }
+    }
+
+    public void addGroupOnCourse(int idGroup, int idCourse, int idTeacher) {
+        String msg = "addGroupOnCourse@" + idGroup + "|" + idCourse + "|" + idTeacher;
+        try {
+            do {
+                DatagramSocket aSocket = new DatagramSocket();
+                byte[] msgByte = msg.getBytes();
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
+                DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
+                aSocket.send(request);
+                byte[] buffer = new byte[buffersize];
+                DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+                aSocket.receive(reply);
+                aSocket.close();
+            } while (msg.trim().equals("quit"));
+        } catch (
+                SocketException e) {
+            System.out.println("(Client) Socket: " + e.getMessage());
+        } catch (
+                IOException e) {
+            System.out.println("(Client) IO: " + e.getMessage());
+        }
+    }
+
+    void setCourseSelect(int idGroup, ComboBox courseCombo) {
+        String msg = "getCoursesByGroup@" + idGroup;
+        try {
+            do {
+                DatagramSocket aSocket = new DatagramSocket();
+                byte[] msgByte = msg.getBytes();
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
+                DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
+                aSocket.send(request);
+                byte[] buffer = new byte[buffersize];
+                DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+                aSocket.receive(reply);
+                String repl = new String(reply.getData()).trim();
+                String[] ph = repl.split("#");
+
+                ObservableList data = FXCollections.observableArrayList();
+
+                for (String str : ph) {
+                    String[] course = str.split("\\Q|\\E");
+                    data.add(course[1].trim() + " | " + course[0].trim());
+                }
+
+                courseCombo.setItems(data);
+
+                aSocket.close();
+            } while (msg.trim().equals("quit"));
+        } catch (
+                SocketException e) {
+            System.out.println("(Client) Socket: " + e.getMessage());
+        } catch (
+                IOException e) {
+            System.out.println("(Client) IO: " + e.getMessage());
+        }
+    }
+
+    void getStudentMarks(int idGroup, int idCourse, String groupName, String courseName) {
+        String msg = "getStudentMarks@" + idGroup + "|" + idCourse;
+        try {
+            do {
+                DatagramSocket aSocket = new DatagramSocket();
+                byte[] msgByte = msg.getBytes();
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
+                DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
+                aSocket.send(request);
+                byte[] buffer = new byte[buffersize];
+                DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+                aSocket.receive(reply);
+                String repl = new String(reply.getData()).trim();
+                String[] ph = repl.split("#");
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+                Date date = new Date();
+                String name = "report_" + groupName + "_" + courseName + "_" + dateFormat.format(date);
+
+                FileWriter fw = new FileWriter(new File("reports" ,"_" + name + ".txt"));
+                fw.write("Група - " + groupName + "  Курс - " + courseName + "\n\n\n");
+                for (String str : ph) {
+                    fw.write(str.trim() + "\n");
+                }
+                fw.close();
+                aSocket.close();
+            } while (msg.trim().equals("quit"));
+        } catch (
+                SocketException e) {
+            System.out.println("(Client) Socket: " + e.getMessage());
+        } catch (
+                IOException e) {
+            System.out.println("(Client) IO: " + e.getMessage());
+        }
+    }
+
+    void getStudentMarks60(int idGroup, int idCourse, String groupName, String courseName) {
+        String msg = "getStudentMarks60@" + idGroup + "|" + idCourse;
+        try {
+            do {
+                DatagramSocket aSocket = new DatagramSocket();
+                byte[] msgByte = msg.getBytes();
+                InetAddress serverInetAddress = InetAddress.getByAddress(serverAddress);
+                DatagramPacket request = new DatagramPacket(msgByte, msg.length(), serverInetAddress, serverPort);
+                aSocket.send(request);
+                byte[] buffer = new byte[buffersize];
+                DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+                aSocket.receive(reply);
+                String repl = new String(reply.getData()).trim();
+                String[] ph = repl.split("#");
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+                Date date = new Date();
+                String name = "report_" + groupName + "_" + courseName + "_" + dateFormat.format(date);
+
+                FileWriter fw = new FileWriter(new File("reports" ,"_" + name + ".txt"));
+                fw.write("Група - " + groupName + "  Курс - " + courseName + "\n\n\n");
+                for (String str : ph) {
+                    fw.write(str.trim() + "\n");
+                }
+                fw.close();
+                aSocket.close();
+            } while (msg.trim().equals("quit"));
+        } catch (
+                SocketException e) {
+            System.out.println("(Client) Socket: " + e.getMessage());
+        } catch (
+                IOException e) {
+            System.out.println("(Client) IO: " + e.getMessage());
+        }
+    }
+
 
 
 

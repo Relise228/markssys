@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     protected static byte serverAddress[] = {127, 0, 0, 1,};
-    protected static int serverPort = 6788;
+    protected static int serverPort = 6787;
     protected static int buffersize = 7000;
     public static ServerAction serv = new ServerAction();
 
@@ -30,12 +30,11 @@ public class Main extends Application {
         }
         serverAddress[i] = (byte) (Integer.parseInt(byteStr));
         for (i = 0; i < 4; i++) System.out.print(serverAddress[i] + ".");
-        System.out.println();
-
 
         Parent root = FXMLLoader.load(getClass().getResource("../fxml/sample.fxml"));
         primaryStage.setTitle("Log In");
         primaryStage.setScene(new Scene(root, 350, 305));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

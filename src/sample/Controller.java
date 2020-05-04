@@ -53,6 +53,7 @@ public class Controller {
                         stage = new Stage();
                         stage.setScene(new Scene(root, 750, 534));
                         stage.setTitle("Admin Panel");
+                        stage.setResizable(false);
                         stage.show();
                     } else {
                         try {
@@ -63,6 +64,7 @@ public class Controller {
                         stage = new Stage();
                         stage.setScene(new Scene(root, 750, 534));
                         stage.setTitle("Teacher Panel");
+                        stage.setResizable(false);
                         stage.show();
                     }
 

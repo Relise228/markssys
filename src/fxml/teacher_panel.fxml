@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -8,7 +9,7 @@
 
 <AnchorPane focusTraversable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="534.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.TeacherPanel">
    <children>
-      <Button fx:id="castButton" layoutX="32.0" layoutY="80.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Скинути">
+      <Button fx:id="castButton" layoutX="32.0" layoutY="80.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Оновити">
          <font>
             <Font name="Book Antiqua" size="14.0" />
          </font></Button>
@@ -33,5 +34,10 @@
           <TableColumn fx:id="course" prefWidth="199.19998168945312" text="Курси" />
         </columns>
       </TableView>
+      <Label layoutX="402.0" layoutY="255.0" text="Результат" textFill="#2311ca">
+         <font>
+            <Font name="Book Antiqua" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

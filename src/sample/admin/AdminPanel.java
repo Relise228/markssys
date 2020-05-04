@@ -69,6 +69,9 @@ public class AdminPanel {
     @FXML
     private Button addTeacherButton;
 
+    @FXML
+    private Button addCourseButton;
+
     private int selectedIdGroup = 0;
     private int selectedIdCourse = 0;
 
@@ -106,6 +109,7 @@ public class AdminPanel {
                 stage = new Stage();
                 stage.setScene(new Scene(root, 350, 305));
                 stage.setTitle("Log In");
+                stage.setResizable(false);
                 stage.show();
             }
         });
@@ -124,6 +128,7 @@ public class AdminPanel {
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
                 stage.setTitle("Add Student");
+                stage.setResizable(false);
                 stage.show();
             }
         });
@@ -142,6 +147,7 @@ public class AdminPanel {
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
                 stage.setTitle("Add Teacher");
+                stage.setResizable(false);
                 stage.show();
             }
         });
@@ -161,6 +167,63 @@ public class AdminPanel {
                 stage.setScene(new Scene(root));
                 stage.setResizable(false);
                 stage.setTitle("Add Group");
+                stage.show();
+            }
+        });
+
+        addCourseButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                FXMLLoader Loader = new FXMLLoader();
+                Loader.setLocation(getClass().getResource("../../fxml/admin/addCourse.fxml"));
+                try {
+                    Loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Parent root = Loader.getRoot();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setResizable(false);
+                stage.setTitle("Add Course");
+                stage.show();
+            }
+        });
+
+        addGroupOnCourseButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                FXMLLoader Loader = new FXMLLoader();
+                Loader.setLocation(getClass().getResource("../../fxml/admin/addGroupOnCourse.fxml"));
+                try {
+                    Loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Parent root = Loader.getRoot();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setResizable(false);
+                stage.setTitle("Add Group On Course");
+                stage.show();
+            }
+        });
+
+        reportButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                FXMLLoader Loader = new FXMLLoader();
+                Loader.setLocation(getClass().getResource("../../fxml/report_panel.fxml"));
+                try {
+                    Loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Parent root = Loader.getRoot();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setResizable(false);
+                stage.setTitle("Report");
                 stage.show();
             }
         });
